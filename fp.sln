@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordCloudMVVM", "..\..\..\..\Desktop\WordCloud\WordCloudMVVM\WordCloudMVVM.csproj", "{6FE8E139-C0C4-4C2C-8BFA-707CE226B288}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordCloudMVVM", "WordCloudMVVM\WordCloudMVVM.csproj", "{6FE8E139-C0C4-4C2C-8BFA-707CE226B288}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordCloudTest", "..\..\..\..\Desktop\WordCloud\WordCloudTest\WordCloudTest.csproj", "{DA861301-7AE6-41F9-9690-CC23D0E79E69}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordCloudTest", "WordCloudTest\WordCloudTest.csproj", "{DA861301-7AE6-41F9-9690-CC23D0E79E69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
