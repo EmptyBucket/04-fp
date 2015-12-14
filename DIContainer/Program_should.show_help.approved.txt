@@ -1,3 +1,0 @@
-﻿Help
-PrintTime
-Timer

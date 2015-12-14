@@ -1,3 +1,0 @@
-﻿Help command:
-  Help -- lists available commands
-  Help <commandName> -- display help for specified command 
