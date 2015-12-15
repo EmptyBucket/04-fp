@@ -15,7 +15,7 @@ namespace WordCloudTest
     public class WordCountParserTest
     {
         private readonly Hunspell mHunspell;
-        private readonly WordCountParser mParser;
+        private readonly WordParser mParser;
 
         public WordCountParserTest()
         {
@@ -35,7 +35,7 @@ namespace WordCloudTest
             };
             ITokenizer stemTokenizer = Mock.Of<ITokenizer>(tokenizer => tokenizer.Tokenize(It.IsAny<string>()) == exceptedTokenize);
 
-            mParser = new WordCountParser(stemTokenizer);
+            mParser = new WordParser(stemTokenizer);
         }
 
         [TestMethod]

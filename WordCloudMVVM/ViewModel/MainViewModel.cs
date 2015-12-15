@@ -12,7 +12,6 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
 using WordCloudMVVM.Model;
-using WordCloudMVVM.Model.Read;
 using WordCloudMVVM.Model.Word;
 
 namespace WordCloudMVVM.ViewModel
@@ -41,12 +40,14 @@ namespace WordCloudMVVM.ViewModel
             button.IsEnabled = false;
             await Task.Run(() =>
             {
-                string text = mTextReader.ReadAll(mPathTextFile);
-                WordWeight[] wordsWeight = mWordParser.Parse(text).ToArray();
+                string text = string.Empty;
+                using (FileStream fileStream = new FileStream(mPathTextFile, FileMode.Open))
+                    text = Read(fileStream);
+                WordWeight[] wordsWeight = Parse(text, Clean, Tokenize).ToArray();
                 mGoodWord = wordsWeight
-                    .Where(word => !mWordInspector.IsBad(word.Say));
+                    .Where(word => !IsBadWord(word.Say));
                 mBadWord = wordsWeight
-                    .Where(word => mWordInspector.IsBad(word.Say));
+                    .Where(word => IsBadWord(word.Say));
                 GoodWordCollection = new ObservableCollection<WordModelView>(
                     WordWeightToWordStyleConverter.Convert(mGoodWord, MaxFontSize)
                     .Select(word => new WordModelView(word.Say, word.FontSize, word.Color, true)));
@@ -69,7 +70,8 @@ namespace WordCloudMVVM.ViewModel
                 IEnumerable<WordStyle> wordFontSizeList = GoodWordCollection.Concat(BadWordCollection)
                     .Where(wordIsActive => wordIsActive.Active)
                     .Select(word => new WordStyle(word.Say, word.FontSize, word.Color));
-                DrawingImage drawImage = mCloudPaninter.DrawCloudWord(wordFontSizeList, SizeWidth, SizeHeight, MaxFontSize);
+                Dictionary<WordStyle, Geometry> geometryWords = BuildGeometryWord(wordFontSizeList, SizeWidth, SizeHeight, MaxFontSize, IntersectionCkeck);
+                DrawingImage drawImage = DrawGeometry(geometryWords);
                 drawImage.Freeze();
                 BitmapImage = drawImage;
             });
@@ -181,12 +183,16 @@ namespace WordCloudMVVM.ViewModel
         public int SizeWidth { get; set; } = 100;
         public int SizeHeight { get; set; } = 100;
 
-        private readonly IWordWeightParser mWordParser;
-        private readonly IWordInspector mWordInspector;
-        private readonly ICloudPainter mCloudPaninter;
+        private readonly Func<string, Func<string, string>, Func<string, IEnumerable<string>>, IEnumerable<WordWeight>> Parse;
+        private readonly Func<string, IEnumerable<string>> Tokenize;
+        private readonly Func<string, string> Clean;
+        private readonly Func<Stream, string> Read;
+        private readonly Func<string, bool> IsBadWord;
+        private readonly Func<Dictionary<WordStyle, Geometry>, DrawingImage> DrawGeometry;
+        private readonly Func<IEnumerable<WordStyle>, int, int, int, Func<Geometry, IEnumerable<Geometry>, bool>, Dictionary<WordStyle, Geometry>> BuildGeometryWord;
+        private readonly Func<Geometry, IEnumerable<Geometry>, bool> IntersectionCkeck;
         private IEnumerable<WordWeight> mGoodWord = new List<WordWeight>();
         private IEnumerable<WordWeight> mBadWord = new List<WordWeight>();
-        private ITextReader mTextReader;
 
         private bool mIndeterminateOpen = false;
         public bool IndeterminateOpen
@@ -213,12 +219,24 @@ namespace WordCloudMVVM.ViewModel
             }
         }
 
-        public MainViewModel(ITextReader textReader, ICloudPainter cloudPainter, IWordWeightParser wordParser, IWordInspector wordInspector)
+        public MainViewModel(
+            Func<Stream, string> read,
+            Func<Dictionary<WordStyle, Geometry>, DrawingImage> drawGeometry,
+            Func<IEnumerable<WordStyle>, int, int, int, Func<Geometry, IEnumerable<Geometry>, bool>, Dictionary<WordStyle, Geometry>> buildGeometryWord,
+            Func<Geometry, IEnumerable<Geometry>, bool> intersectionCkeck,
+            Func<string, Func<string, string>, Func<string, IEnumerable<string>>, IEnumerable<WordWeight>> parse,
+            Func<string, IEnumerable<string>> tokenize,
+            Func<string, string> clean,
+            Func<string, bool> isBadWord)
         {
-            mCloudPaninter = cloudPainter;
-            mWordParser = wordParser;
-            mWordInspector = wordInspector;
-            mTextReader = textReader;
+            Parse = parse;
+            Tokenize = tokenize;
+            Clean = clean;
+            Read = read;
+            DrawGeometry = drawGeometry;
+            BuildGeometryWord = buildGeometryWord;
+            IntersectionCkeck = intersectionCkeck;
+            IsBadWord = isBadWord;
             OverviewTextFileCommand = new RelayCommand(OverviewTextFile);
             OpenTextFileCommand = new RelayCommand<object>(OpenTextFileAsync);
             CreateImageCommand = new RelayCommand<object>(CreateImageAsync);

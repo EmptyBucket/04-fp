@@ -1,22 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using WordCloudMVVM.Model.Cloud;
-using WordCloudMVVM.Model.Cloud.Build.Intersection;
 
 namespace WordCloudMVVM.Model.CloudPaint
 {
-    public class LineCloudBuilder : ICloudBuilder
+    static class LineCloudBuilder
     {
-        private readonly IIntersectionChecker mIntersectionChecher;
-
-        public LineCloudBuilder(IIntersectionChecker intersectionChecher)
-        {
-            mIntersectionChecher = intersectionChecher;
-        }
-
-        public Dictionary<WordStyle, Geometry> BuildWordsGeometry(IEnumerable<WordStyle> words, int imageWidth, int imageHeight, int maxFont)
+        public static Dictionary<WordStyle, Geometry> BuildWordsGeometry(IEnumerable<WordStyle> words, int imageWidth, int imageHeight, int maxFont, Func<Geometry, IEnumerable<Geometry>, bool> IntersectionCheck)
         {
             var sortWords = words.OrderByDescending(word => word.FontSize);
 
@@ -31,7 +24,7 @@ namespace WordCloudMVVM.Model.CloudPaint
                 WordStyle word = enumeratorWords.Current;
                 Geometry geometryWord = GeometryExtended.GetWordGeometry(word, new Point(coordX, coordY));
 
-                for (double offset = 1; mIntersectionChecher.CheckIntersection(geometryWord, prewLineGeometry); offset++)
+                for (double offset = 1; IntersectionCheck(geometryWord, prewLineGeometry); offset++)
                     geometryWord = GeometryExtended.GetWordGeometry(word, new Point(coordX, coordY + offset));
 
                 wordGeometry.Add(word, geometryWord);

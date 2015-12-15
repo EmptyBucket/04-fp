@@ -1,10 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace WordCloudMVVM.Model.WordParse.Clean
+namespace WordCloudMVVM.Model
 {
-    public class TextCleaner : ICleaner
+    static class Cleaner
     {
-        public string Clean(string text)
+        public static string Clean(string text)
         {
             string punctuation = "’'\\[\\],(){}⟨⟩<>:‒…!.\\‐\\-?„“«»“”‘’‹›;1234567890_\\-+=\\/|@#$%^&*\"\r\n\t";
             string punctuationPattern = $"[{punctuation}]";

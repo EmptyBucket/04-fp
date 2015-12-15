@@ -4,9 +4,9 @@ using System.Windows.Media;
 
 namespace WordCloudMVVM.Model.Cloud.Build.Intersection
 {
-    public class IntersectionChecker : IIntersectionChecker
+    static class IntersectionChecker
     {
-        public bool CheckIntersection(Geometry currentGeometry, IEnumerable<Geometry> geometryEnum) =>
+        public static bool CheckIntersection(Geometry currentGeometry, IEnumerable<Geometry> geometryEnum) =>
             geometryEnum.Any(geometry => currentGeometry.FillContainsWithDetail(geometry) != IntersectionDetail.Empty);
     }
 }

@@ -56,10 +56,6 @@
       <HintPath>..\packages\NHunspell.1.2.5554.16953\lib\net\NHunspell.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="nunit.core, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnitTestAdapter.2.0.0\lib\nunit.core.dll</HintPath>
       <Private>True</Private>
@@ -124,34 +120,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\Cloud\Build\Intersection\IIntersectionChecker.cs" />
-    <Compile Include="Model\Cloud\Build\Intersection\IntersectionChecker.cs" />
-    <Compile Include="Model\Cloud\Build\ICloudBuilder.cs" />
-    <Compile Include="Model\Cloud\Build\LineCloudBuilder.cs" />
+    <Compile Include="Model\Cleaner.cs" />
+    <Compile Include="Model\Cloud\IntersectionChecker.cs" />
+    <Compile Include="Model\Cloud\LineCloudBuilder.cs" />
     <Compile Include="Model\Cloud\GeometryExtended.cs" />
-    <Compile Include="Model\Read\ITextReader.cs" />
-    <Compile Include="Model\Read\TXTReader.cs" />
-    <Compile Include="Model\WordInspector\BadWordInspector.cs" />
-    <Compile Include="Model\WordParse\Clean\ICleaner.cs" />
-    <Compile Include="Model\WordParse\Clean\TextCleaner.cs" />
-    <Compile Include="Model\WordParse\Token\ITokenizer.cs" />
-    <Compile Include="Model\WordParse\Token\StemTokenizer.cs" />
-    <Compile Include="Model\WordParse\Token\Tokenizer.cs" />
+    <Compile Include="Model\Parser.cs" />
+    <Compile Include="Model\TextReader.cs" />
+    <Compile Include="Model\StemTokenizer.cs" />
+    <Compile Include="Model\BadWordInspector.cs" />
     <Compile Include="Model\Word\Word.cs" />
     <Compile Include="Model\Word\WordFontSize.cs" />
     <Compile Include="Model\Word\WordStyle.cs" />
-    <Compile Include="Model\Cloud\Paint\ICloudPainter.cs" />
-    <Compile Include="Model\Cloud\Paint\CloudPainter.cs" />
+    <Compile Include="Model\Cloud\GeometryPainter.cs" />
     <Compile Include="Model\Word\WordModelView.cs" />
     <Compile Include="Model\Word\IWord.cs" />
     <Compile Include="Model\Word\WordWeightToWordStyleConverter.cs" />
-    <Compile Include="ViewModel\KernelModule.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="Model\WordInspector\IWorldInspector.cs" />
-    <Compile Include="Model\WordParse\IWorldWeightParser.cs" />
     <Compile Include="Model\Word\WordWeight.cs" />
-    <Compile Include="Model\WordParse\WordCountParser.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
