@@ -1,11 +1,14 @@
 ﻿namespace WordCloudMVVM.Model.Word
 {
-    public class WordFontSize : Word
+    public class WordFontSize
     {
-        public int FontSize { get; private set; }
+        public string Say { get; }
 
-        public WordFontSize(string word, int fontSize) : base(word)
+        public int FontSize { get; }
+
+        public WordFontSize(string word, int fontSize)
         {
+            Say = word;
             FontSize = fontSize;
         }
     }

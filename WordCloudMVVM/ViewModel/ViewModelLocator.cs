@@ -18,10 +18,6 @@ namespace WordCloudMVVM.ViewModel
 
     public class ViewModelLocator
     {
-        static ViewModelLocator()
-        {
-        }
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
             "CA1822:MarkMembersAsStatic",
             Justification = "This non-static member is needed for data binding purposes.")]

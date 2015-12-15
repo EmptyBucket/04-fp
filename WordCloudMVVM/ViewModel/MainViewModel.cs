@@ -161,11 +161,11 @@ namespace WordCloudMVVM.ViewModel
             }
         }
 
-        public RelayCommand OverviewTextFileCommand { get; private set; }
-        public RelayCommand<object> OpenTextFileCommand { get; private set; }
-        public RelayCommand<object> CreateImageCommand { get; private set; }
-        public RelayCommand SaveImageCommand { get; private set; }
-        public RelayCommand UpdateMaxFontCommand { get; private set; }
+        public RelayCommand OverviewTextFileCommand { get; }
+        public RelayCommand<object> OpenTextFileCommand { get; }
+        public RelayCommand<object> CreateImageCommand { get; }
+        public RelayCommand SaveImageCommand { get; }
+        public RelayCommand UpdateMaxFontCommand { get; }
 
         private string mPathTextFile;
         public string PathTextFile

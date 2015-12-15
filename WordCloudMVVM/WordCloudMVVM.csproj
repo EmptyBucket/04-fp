@@ -128,12 +128,10 @@
     <Compile Include="Model\TextReader.cs" />
     <Compile Include="Model\StemTokenizer.cs" />
     <Compile Include="Model\BadWordInspector.cs" />
-    <Compile Include="Model\Word\Word.cs" />
     <Compile Include="Model\Word\WordFontSize.cs" />
     <Compile Include="Model\Word\WordStyle.cs" />
     <Compile Include="Model\Cloud\GeometryPainter.cs" />
     <Compile Include="Model\Word\WordModelView.cs" />
-    <Compile Include="Model\Word\IWord.cs" />
     <Compile Include="Model\Word\WordWeightToWordStyleConverter.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />

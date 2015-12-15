@@ -5,7 +5,7 @@ namespace WordCloudMVVM.Model
 {
     public class WordStyle : WordFontSize
     {
-        public Color Color { get; private set; }
+        public Color Color { get; }
 
         public WordStyle(string word, int fontSize, Color color) : base(word, fontSize)
         {
