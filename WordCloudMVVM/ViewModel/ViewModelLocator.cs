@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Media;
+using NHunspell;
 using WordCloudMVVM.Model;
 using WordCloudMVVM.Model.Cloud.Build.Intersection;
 using WordCloudMVVM.Model.CloudPaint;
@@ -11,13 +13,22 @@ namespace WordCloudMVVM.ViewModel
     public delegate DrawingImage DrawingGeometryDelegate(Dictionary<WordStyle, Geometry> geometryWords);
     public delegate Dictionary<WordStyle, Geometry> BuildGeometryDelegate(IEnumerable<WordStyle> words, int imageWidth, int imageHeight, int maxFont, CheckIntersectionDelegate IntersectionCheck);
     public delegate bool CheckIntersectionDelegate(Geometry currentGeometry, IEnumerable<Geometry> geometryEnum);
-    public delegate IEnumerable<WordWeight> ParseDelegate(string text, CleanDelegate Clean, TokenizeDelegate Tokenize);
-    public delegate IEnumerable<string> TokenizeDelegate(string text);
+    public delegate IEnumerable<WordWeight> ParseDelegate(IEnumerable<string> words);
+    public delegate IEnumerable<string> StemTokenizeDelegate(string text, Hunspell hunspell);
     public delegate string CleanDelegate(string text);
-    public delegate bool IsBadDelegate(string word);
+    public delegate bool IsBadDelegate(string word, HashSet<string> badWords);
 
     public class ViewModelLocator
     {
+        private static readonly string pathDicitonaryBadWord = System.IO.Path.Combine(Environment.CurrentDirectory, "InspectorDictionary", "InspectorDictionary.txt");
+
+        private static readonly HashSet<string> mBadWords = new HashSet<string>(System.IO.File.ReadAllLines(pathDicitonaryBadWord));
+
+        private static readonly string pathAffHunspell = System.IO.Path.Combine(Environment.CurrentDirectory, "HunspellDictionary", "ru_RU.aff");
+        private static readonly string pathDicionaryHunspell = System.IO.Path.Combine(Environment.CurrentDirectory, "HunspellDictionary", "ru_RU.dic");
+
+        private static readonly Hunspell mHunspell = new Hunspell(pathAffHunspell, pathDicionaryHunspell);
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
             "CA1822:MarkMembersAsStatic",
             Justification = "This non-static member is needed for data binding purposes.")]
@@ -26,10 +37,12 @@ namespace WordCloudMVVM.ViewModel
             GeometryPainter.DrawGeometry,
             LineCloudBuilder.BuildWordsGeometry,
             IntersectionChecker.CheckIntersection,
-            Parser.Parse,
-            StemTokenizer.Tokenize,
+            CountParser.CountParse,
+            StemTokenizer.StemTokenize,
+            mHunspell,
             Cleaner.Clean,
-            BadWordInspector.IsBad);
+            BadWordInspector.IsBad,
+            mBadWords);
 
         public static void Cleanup()
         {

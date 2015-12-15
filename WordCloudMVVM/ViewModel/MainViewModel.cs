@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
+using NHunspell;
 using WordCloudMVVM.Model;
 using WordCloudMVVM.Model.Word;
 
@@ -43,11 +44,13 @@ namespace WordCloudMVVM.ViewModel
                 string text = string.Empty;
                 using (FileStream fileStream = new FileStream(mPathTextFile, FileMode.Open))
                     text = Read(fileStream);
-                WordWeight[] wordsWeight = Parse(text, Clean, Tokenize).ToArray();
+                string cleanText = Clean(text);
+                IEnumerable<string> words = Tokenize(cleanText, mHunspell);
+                WordWeight[] wordsWeight = CountParse(words).ToArray();
                 mGoodWord = wordsWeight
-                    .Where(word => !IsBadWord(word.Say));
+                    .Where(word => !IsBadWord(word.Say, BadWords));
                 mBadWord = wordsWeight
-                    .Where(word => IsBadWord(word.Say));
+                    .Where(word => IsBadWord(word.Say, BadWords));
                 GoodWordCollection = new ObservableCollection<WordModelView>(
                     WordWeightToWordStyleConverter.Convert(mGoodWord, MaxFontSize)
                     .Select(word => new WordModelView(word.Say, word.FontSize, word.Color, true)));
@@ -183,11 +186,13 @@ namespace WordCloudMVVM.ViewModel
         public int SizeWidth { get; set; } = 100;
         public int SizeHeight { get; set; } = 100;
 
-        private readonly ParseDelegate Parse;
-        private readonly TokenizeDelegate Tokenize;
+        private readonly ParseDelegate CountParse;
+        private readonly StemTokenizeDelegate Tokenize;
+        private readonly Hunspell mHunspell;
         private readonly CleanDelegate Clean;
         private readonly ReadDelegate Read;
         private readonly IsBadDelegate IsBadWord;
+        private readonly HashSet<string> BadWords;
         private readonly DrawingGeometryDelegate DrawGeometry;
         private readonly BuildGeometryDelegate BuildGeometryWord;
         private readonly CheckIntersectionDelegate IntersectionCkeck;
@@ -207,6 +212,7 @@ namespace WordCloudMVVM.ViewModel
             }
         }
         private bool mIndeterminateCreate = false;
+
         public bool IndeterminateCreate
         {
             get
@@ -219,16 +225,26 @@ namespace WordCloudMVVM.ViewModel
             }
         }
 
-        public MainViewModel(ReadDelegate read, DrawingGeometryDelegate drawGeometry, BuildGeometryDelegate buildGeometryWord, CheckIntersectionDelegate intersectionCkeck, ParseDelegate parse, TokenizeDelegate tokenize, CleanDelegate clean, IsBadDelegate isBadWord)
+        public MainViewModel(
+            ReadDelegate read,
+            DrawingGeometryDelegate drawGeometry,
+            BuildGeometryDelegate buildGeometryWord,
+            CheckIntersectionDelegate intersectionCkeck,
+            ParseDelegate parse,
+            StemTokenizeDelegate tokenize,
+            Hunspell hunspell,
+            CleanDelegate clean, IsBadDelegate isBadWord, HashSet<string> badWords)
         {
-            Parse = parse;
+            CountParse = parse;
             Tokenize = tokenize;
+            mHunspell = hunspell;
             Clean = clean;
             Read = read;
             DrawGeometry = drawGeometry;
             BuildGeometryWord = buildGeometryWord;
             IntersectionCkeck = intersectionCkeck;
             IsBadWord = isBadWord;
+            BadWords = badWords;
             OverviewTextFileCommand = new RelayCommand(OverviewTextFile);
             OpenTextFileCommand = new RelayCommand<object>(OpenTextFileAsync);
             CreateImageCommand = new RelayCommand<object>(CreateImageAsync);

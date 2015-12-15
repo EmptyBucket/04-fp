@@ -62,7 +62,6 @@
   <ItemGroup>
     <Compile Include="BadWordInspectorTest.cs" />
     <Compile Include="TextCleanerTest.cs" />
-    <Compile Include="TokenizerTest.cs" />
     <Compile Include="StemTokenizerTest.cs" />
     <Compile Include="WordWeightToWordFontSizeConverterTest.cs" />
     <Compile Include="WordCountParserTest.cs" />

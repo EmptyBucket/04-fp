@@ -2,7 +2,7 @@
 
 namespace WordCloudMVVM.Model
 {
-    static class Cleaner
+    public static class Cleaner
     {
         public static string Clean(string text)
         {

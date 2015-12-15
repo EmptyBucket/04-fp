@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 
 namespace WordCloudMVVM.Model.WordInspector
 {
-    static class BadWordInspector
+    public static class BadWordInspector
     {
-        private static readonly string pathDicitonaryBadWord = Path.Combine(Environment.CurrentDirectory, "InspectorDictionary", "InspectorDictionary.txt");
-
-        private static readonly HashSet<string> mBadWords = new HashSet<string>(File.ReadAllLines(pathDicitonaryBadWord));
-
-        public static bool IsBad(string word) =>
-            mBadWords.Contains(word);
+        public static bool IsBad(string word, HashSet<string> badWords) =>
+            badWords.Contains(word);
     }
 }

@@ -124,7 +124,7 @@
     <Compile Include="Model\Cloud\IntersectionChecker.cs" />
     <Compile Include="Model\Cloud\LineCloudBuilder.cs" />
     <Compile Include="Model\Cloud\GeometryExtended.cs" />
-    <Compile Include="Model\Parser.cs" />
+    <Compile Include="Model\CountParser.cs" />
     <Compile Include="Model\TextReader.cs" />
     <Compile Include="Model\StemTokenizer.cs" />
     <Compile Include="Model\BadWordInspector.cs" />

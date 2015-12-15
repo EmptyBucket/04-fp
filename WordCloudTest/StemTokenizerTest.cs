@@ -3,37 +3,39 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using NHunspell;
-using WordCloudMVVM.Model.WordParse;
-using WordCloudMVVM.Model.WordParse.Clean;
+using WordCloudMVVM.Model;
 
 namespace WordCloudTest
 {
     [TestClass]
     public class StemTokenizerTest
     {
-        private readonly StemTokenizer mStemTokenizer;
-        private readonly string mText;
+        private readonly Hunspell mHunspell;
 
         public StemTokenizerTest()
         {
-            mText = "свойственны дворе свете";
-            ICleaner textCleaner = Mock.Of<ICleaner>(cleaner => cleaner.Clean(It.IsAny<string>()) == mText);
-
             string pathHunspellDict = Path.Combine(Environment.CurrentDirectory, "HunspellDictionary", "ru_RU.dic");
             string pathHunspellAff = Path.Combine(Environment.CurrentDirectory, "HunspellDictionary", "ru_RU.aff");
 
-            Hunspell hunspell = new Hunspell(pathHunspellAff, pathHunspellDict);
-
-            mStemTokenizer = new StemTokenizer(textCleaner, hunspell);
+            mHunspell = new Hunspell(pathHunspellAff, pathHunspellDict);
         }
 
         [TestMethod]
         public void Text_GetAllPrimaryWord_PrimaryWord()
         {
+            string text = "свойственны дворе свете";
             IEnumerable<string> exceptWord = new[] { "свойственный", "свет", "двор" };
-            IEnumerable<string> actualWord = mStemTokenizer.Tokenize(mText);
+            IEnumerable<string> actualWord = StemTokenizer.StemTokenize(text, mHunspell);
+            Assert.IsTrue(exceptWord.All(word => actualWord.Contains(word)));
+        }
+
+        [TestMethod]
+        public void Text_Tokenize_AllWord()
+        {
+            string text = "которые свойственны состаревшемуся в свете и при дворе значительному человеку";
+            IEnumerable<string> actualWord = StemTokenizer.Tokenize(text);
+            string[] exceptWord = new[] { "которые", "свойственны", "состаревшемуся", "в", "свете", "и", "при", "дворе", "значительному", "человеку" };
             Assert.IsTrue(exceptWord.All(word => actualWord.Contains(word)));
         }
     }
