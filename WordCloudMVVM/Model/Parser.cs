@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WordCloudMVVM.ViewModel;
 
 namespace WordCloudMVVM.Model
 {
     static class Parser
     {
-        public static IEnumerable<WordWeight> Parse(string text, Func<string, string> Clean, Func<string, IEnumerable<string>> Tokenize)
+        public static IEnumerable<WordWeight> Parse(string text, CleanDelegate Clean, TokenizeDelegate Tokenize)
         {
             string cleanText = Clean(text);
 

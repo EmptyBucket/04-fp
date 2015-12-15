@@ -16,17 +16,7 @@
         DataContext="{Binding Main, Source={StaticResource Locator}}">
 
   <Window.Resources>
-    <ResourceDictionary>
-      <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="Skins/MainSkin.xaml" />
-        <ResourceDictionary Source="Skins/ButtonSkin.xaml"/>
-        <ResourceDictionary Source="Skins/BorderSkin.xaml"/>
-        <ResourceDictionary Source="Skins/ListViewSkin.xaml"/>
-        <ResourceDictionary Source="Skins/ButtonExitSkin.xaml"/>
-        <ResourceDictionary Source="Skins/LoupeIcon.xaml"/>
-        <ResourceDictionary Source="Skins/CloudIcon.xaml"/>
-      </ResourceDictionary.MergedDictionaries>
-    </ResourceDictionary>
+    <ResourceDictionary Source="Skins/MainSkin.xaml" />
   </Window.Resources>
 
   <Border Opacity="{Binding ElementName=SliderOpacity, Path=Value}" Background="Transparent">
@@ -181,7 +171,7 @@
                 <EventTrigger RoutedEvent="MouseEnter">
                   <BeginStoryboard>
                     <Storyboard TargetName="border">
-                      <Int32Animation Storyboard.TargetProperty="(Panel.ZIndex)" To="2"/>
+                      <Int32Animation Storyboard.TargetProperty="(Panel.ZIndex)" To="2" SpeedRatio="10"/>
                       <DoubleAnimation To="2.55" Storyboard.TargetProperty="RenderTransform.Children[0].ScaleX">
                         <DoubleAnimation.EasingFunction>
                           <PowerEase Power="10" EasingMode="EaseOut"/>

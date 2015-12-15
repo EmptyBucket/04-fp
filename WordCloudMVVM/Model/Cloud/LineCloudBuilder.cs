@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using WordCloudMVVM.Model.Cloud;
+using WordCloudMVVM.ViewModel;
 
 namespace WordCloudMVVM.Model.CloudPaint
 {
     static class LineCloudBuilder
     {
-        public static Dictionary<WordStyle, Geometry> BuildWordsGeometry(IEnumerable<WordStyle> words, int imageWidth, int imageHeight, int maxFont, Func<Geometry, IEnumerable<Geometry>, bool> IntersectionCheck)
+        public static Dictionary<WordStyle, Geometry> BuildWordsGeometry(IEnumerable<WordStyle> words, int imageWidth, int imageHeight, int maxFont, CheckIntersectionDelegate IntersectionCheck)
         {
             var sortWords = words.OrderByDescending(word => word.FontSize);
 

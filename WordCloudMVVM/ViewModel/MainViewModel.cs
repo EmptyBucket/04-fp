@@ -183,14 +183,14 @@ namespace WordCloudMVVM.ViewModel
         public int SizeWidth { get; set; } = 100;
         public int SizeHeight { get; set; } = 100;
 
-        private readonly Func<string, Func<string, string>, Func<string, IEnumerable<string>>, IEnumerable<WordWeight>> Parse;
-        private readonly Func<string, IEnumerable<string>> Tokenize;
-        private readonly Func<string, string> Clean;
-        private readonly Func<Stream, string> Read;
-        private readonly Func<string, bool> IsBadWord;
-        private readonly Func<Dictionary<WordStyle, Geometry>, DrawingImage> DrawGeometry;
-        private readonly Func<IEnumerable<WordStyle>, int, int, int, Func<Geometry, IEnumerable<Geometry>, bool>, Dictionary<WordStyle, Geometry>> BuildGeometryWord;
-        private readonly Func<Geometry, IEnumerable<Geometry>, bool> IntersectionCkeck;
+        private readonly ParseDelegate Parse;
+        private readonly TokenizeDelegate Tokenize;
+        private readonly CleanDelegate Clean;
+        private readonly ReadDelegate Read;
+        private readonly IsBadDelegate IsBadWord;
+        private readonly DrawingGeometryDelegate DrawGeometry;
+        private readonly BuildGeometryDelegate BuildGeometryWord;
+        private readonly CheckIntersectionDelegate IntersectionCkeck;
         private IEnumerable<WordWeight> mGoodWord = new List<WordWeight>();
         private IEnumerable<WordWeight> mBadWord = new List<WordWeight>();
 
@@ -219,15 +219,7 @@ namespace WordCloudMVVM.ViewModel
             }
         }
 
-        public MainViewModel(
-            Func<Stream, string> read,
-            Func<Dictionary<WordStyle, Geometry>, DrawingImage> drawGeometry,
-            Func<IEnumerable<WordStyle>, int, int, int, Func<Geometry, IEnumerable<Geometry>, bool>, Dictionary<WordStyle, Geometry>> buildGeometryWord,
-            Func<Geometry, IEnumerable<Geometry>, bool> intersectionCkeck,
-            Func<string, Func<string, string>, Func<string, IEnumerable<string>>, IEnumerable<WordWeight>> parse,
-            Func<string, IEnumerable<string>> tokenize,
-            Func<string, string> clean,
-            Func<string, bool> isBadWord)
+        public MainViewModel(ReadDelegate read, DrawingGeometryDelegate drawGeometry, BuildGeometryDelegate buildGeometryWord, CheckIntersectionDelegate intersectionCkeck, ParseDelegate parse, TokenizeDelegate tokenize, CleanDelegate clean, IsBadDelegate isBadWord)
         {
             Parse = parse;
             Tokenize = tokenize;
