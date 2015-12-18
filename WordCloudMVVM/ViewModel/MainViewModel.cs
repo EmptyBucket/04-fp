@@ -11,7 +11,6 @@ using System.Windows.Media.Imaging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
-using NHunspell;
 using WordCloudMVVM.Model;
 using WordCloudMVVM.Model.Word;
 
@@ -31,26 +30,19 @@ namespace WordCloudMVVM.ViewModel
 
         public async void OpenTextFileAsync(object sender)
         {
-            Button button = (Button)sender;
             if (PathTextFile == null)
             {
                 MessageBox.Show("Specify the path to the text", "Error path file", MessageBoxButton.OK);
                 return;
             }
+            Button button = (Button)sender;
             IndeterminateOpen = true;
             button.IsEnabled = false;
             await Task.Run(() =>
             {
-                string text = string.Empty;
-                using (FileStream fileStream = new FileStream(mPathTextFile, FileMode.Open))
-                    text = Read(fileStream);
-                string cleanText = Clean(text);
-                IEnumerable<string> words = Tokenize(cleanText, mHunspell);
-                WordWeight[] wordsWeight = CountParse(words).ToArray();
-                mGoodWord = wordsWeight
-                    .Where(word => !IsBadWord(word.Say, BadWords));
-                mBadWord = wordsWeight
-                    .Where(word => IsBadWord(word.Say, BadWords));
+                InspectWords inspectWords = Parse(mPathTextFile);
+                mGoodWord = inspectWords.GoodWords;
+                mBadWord = inspectWords.BadWords;
                 GoodWordCollection = new ObservableCollection<WordModelView>(
                     WordWeightToWordStyleConverter.Convert(mGoodWord, MaxFontSize)
                     .Select(word => new WordModelView(word.Say, word.FontSize, word.Color, true)));
@@ -65,16 +57,15 @@ namespace WordCloudMVVM.ViewModel
         public async void CreateImageAsync(object sender)
         {
             Button button = (Button)sender;
-
             IndeterminateCreate = true;
             button.IsEnabled = false;
             await Task.Run(() =>
             {
-                IEnumerable<WordStyle> wordFontSizeList = GoodWordCollection.Concat(BadWordCollection)
+                var styleWords = GoodWordCollection
+                    .Concat(BadWordCollection)
                     .Where(wordIsActive => wordIsActive.Active)
                     .Select(word => new WordStyle(word.Say, word.FontSize, word.Color));
-                Dictionary<WordStyle, Geometry> geometryWords = BuildGeometryWord(wordFontSizeList, SizeWidth, SizeHeight, MaxFontSize, IntersectionCkeck);
-                DrawingImage drawImage = DrawGeometry(geometryWords);
+                DrawingImage drawImage = DrawGeometryWords(styleWords, SizeWidth, SizeHeight, MaxFontSize);
                 drawImage.Freeze();
                 BitmapImage = drawImage;
             });
@@ -119,10 +110,10 @@ namespace WordCloudMVVM.ViewModel
 
         public void UpdateMaxFont()
         {
-            GoodWordCollection = new ObservableCollection<WordModelView>(
+            GoodWordCollection = new List<WordModelView>(
                 WordWeightToWordStyleConverter.Convert(mGoodWord, MaxFontSize)
                 .Select(word => new WordModelView(word.Say, word.FontSize, word.Color, true)));
-            BadWordCollection = new ObservableCollection<WordModelView>(
+            BadWordCollection = new List<WordModelView>(
                 WordWeightToWordStyleConverter.Convert(mBadWord, MaxFontSize)
                 .Select(word => new WordModelView(word.Say, word.FontSize, word.Color, false)));
         }
@@ -139,20 +130,20 @@ namespace WordCloudMVVM.ViewModel
                 Set(nameof(BitmapImage), ref mBitmapImage, value);
             }
         }
-        private ObservableCollection<WordModelView> mGoodWordCollection = new ObservableCollection<WordModelView>();
-        public ObservableCollection<WordModelView> GoodWordCollection
+        private IEnumerable<WordModelView> mGoodWordCollection = new List<WordModelView>();
+        public IEnumerable<WordModelView> GoodWordCollection
         {
             get
             {
                 return mGoodWordCollection;
             }
-            private set
+            set
             {
                 Set(nameof(GoodWordCollection), ref mGoodWordCollection, value);
             }
         }
-        private ObservableCollection<WordModelView> mBadWordCollection = new ObservableCollection<WordModelView>();
-        public ObservableCollection<WordModelView> BadWordCollection
+        private IEnumerable<WordModelView> mBadWordCollection = new List<WordModelView>();
+        public IEnumerable<WordModelView> BadWordCollection
         {
             get
             {
@@ -186,16 +177,8 @@ namespace WordCloudMVVM.ViewModel
         public int SizeWidth { get; set; } = 100;
         public int SizeHeight { get; set; } = 100;
 
-        private readonly ParseDelegate CountParse;
-        private readonly StemTokenizeDelegate Tokenize;
-        private readonly Hunspell mHunspell;
-        private readonly CleanDelegate Clean;
-        private readonly ReadDelegate Read;
-        private readonly IsBadDelegate IsBadWord;
-        private readonly HashSet<string> BadWords;
-        private readonly DrawingGeometryDelegate DrawGeometry;
-        private readonly BuildGeometryDelegate BuildGeometryWord;
-        private readonly CheckIntersectionDelegate IntersectionCkeck;
+        private readonly ParseDelegate Parse;
+        private readonly DrawGeometryWordsDelegate DrawGeometryWords;
         private IEnumerable<WordWeight> mGoodWord = new List<WordWeight>();
         private IEnumerable<WordWeight> mBadWord = new List<WordWeight>();
 
@@ -212,7 +195,6 @@ namespace WordCloudMVVM.ViewModel
             }
         }
         private bool mIndeterminateCreate = false;
-
         public bool IndeterminateCreate
         {
             get
@@ -225,26 +207,10 @@ namespace WordCloudMVVM.ViewModel
             }
         }
 
-        public MainViewModel(
-            ReadDelegate read,
-            DrawingGeometryDelegate drawGeometry,
-            BuildGeometryDelegate buildGeometryWord,
-            CheckIntersectionDelegate intersectionCkeck,
-            ParseDelegate parse,
-            StemTokenizeDelegate tokenize,
-            Hunspell hunspell,
-            CleanDelegate clean, IsBadDelegate isBadWord, HashSet<string> badWords)
+        public MainViewModel(DrawGeometryWordsDelegate drawGeometryWords, ParseDelegate parse)
         {
-            CountParse = parse;
-            Tokenize = tokenize;
-            mHunspell = hunspell;
-            Clean = clean;
-            Read = read;
-            DrawGeometry = drawGeometry;
-            BuildGeometryWord = buildGeometryWord;
-            IntersectionCkeck = intersectionCkeck;
-            IsBadWord = isBadWord;
-            BadWords = badWords;
+            Parse = parse;
+            DrawGeometryWords = drawGeometryWords;
             OverviewTextFileCommand = new RelayCommand(OverviewTextFile);
             OpenTextFileCommand = new RelayCommand<object>(OpenTextFileAsync);
             CreateImageCommand = new RelayCommand<object>(CreateImageAsync);

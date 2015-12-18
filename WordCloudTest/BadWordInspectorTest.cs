@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WordCloudMVVM.Model.WordInspector;
+using WordCloudMVVM.Model;
 
 namespace WordCloudTest
 {
@@ -16,7 +16,7 @@ namespace WordCloudTest
         }
 
         [TestMethod]
-        public void TextBadAndGoodWord_IsBad_TextGoodWord()
+        public void BadAndGoodWords_IsBad_GoodWords()
         {
             List<string> lines = mBadWords.ToList();
             lines.Add("пошел");
@@ -24,6 +24,14 @@ namespace WordCloudTest
             var actualWord = lines.Where(line => !BadWordInspector.IsBad(line, mBadWords)).ToList();
             Assert.IsTrue(actualWord.Count == 1);
             Assert.AreEqual(exceptWord, actualWord[0]);
+        }
+
+        [TestMethod]
+        public void TextOnlyBadWords_IsBad_Empty()
+        {
+            List<string> lines = mBadWords.ToList();
+            var actualWord = lines.Where(line => !BadWordInspector.IsBad(line, mBadWords)).ToList();
+            Assert.IsTrue(actualWord.Count == 0);
         }
     }
 }

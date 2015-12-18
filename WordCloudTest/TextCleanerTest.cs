@@ -14,5 +14,23 @@ namespace WordCloudTest
             string exceptCleanText = " qwe ";
             Assert.AreEqual(exceptCleanText, cleanText);
         }
+
+        [TestMethod]
+        public void CleanText_Clear_SameText()
+        {
+            string dirtyText = "qwer sadf qwera sdf xcv asdf asdfqwer asdf wer";
+            string cleanText = Cleaner.Clean(dirtyText);
+            string exceptCleanText = "qwer sadf qwera sdf xcv asdf asdfqwer asdf wer";
+            Assert.AreEqual(exceptCleanText, cleanText);
+        }
+
+        [TestMethod]
+        public void EmptyText_Clear_SameText()
+        {
+            string dirtyText = string.Empty;
+            string cleanText = Cleaner.Clean(dirtyText);
+            string exceptCleanText = string.Empty;
+            Assert.AreEqual(exceptCleanText, cleanText);
+        }
     }
 }

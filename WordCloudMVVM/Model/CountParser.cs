@@ -5,18 +5,20 @@ namespace WordCloudMVVM.Model
 {
     public static class CountParser
     {
-        public static IEnumerable<WordWeight> CountParse(IEnumerable<string> words)
+        public static HashSet<WordWeight> CountParse(IEnumerable<string> words)
         {
-            HashSet<string> uniqueWords = new HashSet<string>(words);
+            var uniqueWords = new HashSet<string>(words);
 
-            Dictionary<string, int> dictCountUniqueWords = uniqueWords
+            var dictCountUniqueWords = uniqueWords
                 .ToDictionary(item => item, item => 0);
 
             foreach (var item in words)
                 dictCountUniqueWords[item]++;
 
-            return dictCountUniqueWords
+            var uniqueWordsWeight = dictCountUniqueWords
                 .Select(CountWord => new WordWeight(CountWord.Key, CountWord.Value));
+
+            return new HashSet<WordWeight>(uniqueWordsWeight);
         }
     }
 }

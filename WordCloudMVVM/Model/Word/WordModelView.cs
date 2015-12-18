@@ -10,7 +10,7 @@ namespace WordCloudMVVM.Model
 
         public bool Active { get; set; }
 
-        public string Say { get; set; }
+        public string Say { get; }
 
         public WordModelView(string word, int fontSize, Color color, bool active)
         {

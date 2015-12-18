@@ -22,12 +22,11 @@ namespace WordCloudTest
         }
 
         [TestMethod]
-        public void TextNewLineWord_Parse_CorrectEnumWordWeight()
+        public void Words_Parse_CorrectEnumWordWeight()
         {
-            string newLine = Environment.NewLine;
-            string[] textNewLineWord = new string[] { "свойственный", "состарившийся", "двор", "свет", "и", "при", "двор" };
+            string[] words = new string[] { "свойственный", "состарившийся", "двор", "свет", "и", "при", "двор" };
 
-            IEnumerable<WordWeight> wordWeightEnum = CountParser.CountParse(textNewLineWord);
+            IEnumerable<WordWeight> wordWeightEnum = CountParser.CountParse(words);
             var except = new WordWeight("свойственный", 1);
             var actual = wordWeightEnum.First(wordWeight => wordWeight.Say == "свойственный");
             Assert.AreEqual(except.Say, actual.Say);
@@ -43,11 +42,28 @@ namespace WordCloudTest
         }
 
         [TestMethod]
-        public void TextNewLineWord_Parse_CorrectCoutElement()
+        public void OneWordsManyTimes_Parse_CorrectWordsWeight()
         {
-            string newLine = Environment.NewLine;
-            string[] textNewLineWord = new string[] { "свойственный", "состарившийся", "двор", "свет", "и", "при", "двор" };
-            IEnumerable<WordWeight> wordWeightEnum = CountParser.CountParse(textNewLineWord);
+            var words = Enumerable.Repeat("свет", 100);
+            var actual = CountParser.CountParse(words);
+            Assert.IsTrue(actual.All(wordWeight => wordWeight.Say == "свет"));
+            Assert.AreEqual(1, actual.Count);
+        }
+
+        [TestMethod]
+        public void OneWordOneTimes_Parse_CorrectWordWeight()
+        {
+            var words = new List<string> { "свет" };
+            var actual = CountParser.CountParse(words);
+            Assert.IsTrue(actual.All(wordWeight => wordWeight.Say == "свет"));
+            Assert.AreEqual(1, actual.Count);
+        }
+
+        [TestMethod]
+        public void Words_Parse_CorrectCoutElement()
+        {
+            string[] words = new string[] { "свойственный", "состарившийся", "двор", "свет", "и", "при", "двор" };
+            IEnumerable<WordWeight> wordWeightEnum = CountParser.CountParse(words);
             var actualCount = wordWeightEnum.Count();
             Assert.AreEqual(6, actualCount);
         }

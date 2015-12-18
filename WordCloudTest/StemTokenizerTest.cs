@@ -22,7 +22,7 @@ namespace WordCloudTest
         }
 
         [TestMethod]
-        public void Text_GetAllPrimaryWord_PrimaryWord()
+        public void Text_StemTokenize_StemAllWords()
         {
             string text = "свойственны дворе свете";
             IEnumerable<string> exceptWord = new[] { "свойственный", "свет", "двор" };
@@ -31,7 +31,7 @@ namespace WordCloudTest
         }
 
         [TestMethod]
-        public void Text_Tokenize_AllWord()
+        public void Text_Tokenize_AllWords()
         {
             string text = "которые свойственны состаревшемуся в свете и при дворе значительному человеку";
             IEnumerable<string> actualWord = StemTokenizer.Tokenize(text);

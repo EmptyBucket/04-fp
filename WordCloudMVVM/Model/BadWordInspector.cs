@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WordCloudMVVM.Model.WordInspector
+namespace WordCloudMVVM.Model
 {
     public static class BadWordInspector
     {
