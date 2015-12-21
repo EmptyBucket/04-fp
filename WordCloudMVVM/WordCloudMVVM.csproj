@@ -122,7 +122,6 @@
     </ApplicationDefinition>
     <Compile Include="Model\BadWordInspector.cs" />
     <Compile Include="Model\Cleaner.cs" />
-    <Compile Include="Model\Cloud\IntersectionChecker.cs" />
     <Compile Include="Model\Cloud\LineCloudBuilder.cs" />
     <Compile Include="Model\Cloud\GeometryExtended.cs" />
     <Compile Include="Model\CountParser.cs" />

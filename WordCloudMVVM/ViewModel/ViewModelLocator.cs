@@ -5,13 +5,11 @@ using System.Linq;
 using System.Windows.Media;
 using NHunspell;
 using WordCloudMVVM.Model;
-using WordCloudMVVM.Model.Cloud.Build.Intersection;
 using WordCloudMVVM.Model.CloudPaint;
 
 namespace WordCloudMVVM.ViewModel
 {
     public delegate DrawingImage DrawGeometryWordsDelegate(IEnumerable<WordStyle> words, int imageWidth, int imageHeight, int maxFont);
-    public delegate bool CheckIntersectionDelegate(Geometry currentGeometry, IEnumerable<Geometry> geometryEnum);
     public delegate InspectWords ParseDelegate(string path);
 
     public class ViewModelLocator
@@ -49,7 +47,7 @@ namespace WordCloudMVVM.ViewModel
 
         private static DrawingImage DrawGeometryWords(IEnumerable<WordStyle> words, int imageWidth, int imageHeight, int maxFont)
         {
-            var wordsGeometry = LineCloudBuilder.BuildWordsGeometry(words, imageWidth, imageHeight, maxFont, IntersectionChecker.CheckIntersection);
+            var wordsGeometry = LineCloudBuilder.BuildWordsGeometry(words, imageWidth, imageHeight, maxFont);
             return GeometryPainter.DrawGeometry(wordsGeometry);
         }
 
