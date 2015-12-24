@@ -26,7 +26,7 @@ namespace WordCloudTest
         {
             string[] words = new string[] { "свойственный", "состарившийся", "двор", "свет", "и", "при", "двор" };
 
-            IEnumerable<WordWeight> wordWeightEnum = CountParser.CountParse(words);
+            var wordWeightEnum = CountParser.CountParse(words);
             var except = new WordWeight("свойственный", 1);
             var actual = wordWeightEnum.First(wordWeight => wordWeight.Say == "свойственный");
             Assert.AreEqual(except.Say, actual.Say);
@@ -44,7 +44,7 @@ namespace WordCloudTest
         [TestMethod]
         public void OneWordsManyTimes_Parse_CorrectWordsWeight()
         {
-            var words = Enumerable.Repeat("свет", 100);
+            var words = Enumerable.Repeat("свет", 100).ToArray();
             var actual = CountParser.CountParse(words);
             Assert.IsTrue(actual.All(wordWeight => wordWeight.Say == "свет"));
             Assert.AreEqual(1, actual.Count);
@@ -63,7 +63,7 @@ namespace WordCloudTest
         public void Words_Parse_CorrectCoutElement()
         {
             string[] words = new string[] { "свойственный", "состарившийся", "двор", "свет", "и", "при", "двор" };
-            IEnumerable<WordWeight> wordWeightEnum = CountParser.CountParse(words);
+            var wordWeightEnum = CountParser.CountParse(words);
             var actualCount = wordWeightEnum.Count();
             Assert.AreEqual(6, actualCount);
         }

@@ -5,7 +5,7 @@ namespace WordCloudMVVM.Model
 {
     public static class CountParser
     {
-        public static HashSet<WordWeight> CountParse(IEnumerable<string> words)
+        public static HashSet<WordWeight> CountParse(IReadOnlyCollection<string> words)
         {
             var uniqueWords = new HashSet<string>(words);
 

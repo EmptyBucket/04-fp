@@ -10,7 +10,7 @@ using WordCloudMVVM.Model.CloudPaint;
 
 namespace WordCloudMVVM.ViewModel
 {
-    public delegate DrawingImage DrawGeometryWordsDelegate(IEnumerable<WordStyle> words, int imageWidth, int imageHeight, int maxFont);
+    public delegate DrawingImage DrawGeometryWordsDelegate(IReadOnlyCollection<WordStyle> words, int imageWidth, int imageHeight, int maxFont);
     public delegate InspectWords ParseDelegate(string path);
 
     public class ViewModelLocator
@@ -40,13 +40,13 @@ namespace WordCloudMVVM.ViewModel
 
             var badWordsDict = new HashSet<string>(File.ReadAllLines(pathDicitonaryBadWord));
 
-            var goodWords = words.Where(wordWeight => !BadWordInspector.IsBad(wordWeight.Say, badWordsDict));
-            var badWords = words.Where(wordWeight => BadWordInspector.IsBad(wordWeight.Say, badWordsDict));
+            var goodWords = words.Where(wordWeight => !BadWordInspector.IsBad(wordWeight.Say, badWordsDict)).ToArray();
+            var badWords = words.Where(wordWeight => BadWordInspector.IsBad(wordWeight.Say, badWordsDict)).ToArray();
 
             return new InspectWords(goodWords, badWords);
         }
 
-        private static DrawingImage DrawGeometryWords(IEnumerable<WordStyle> words, int imageWidth, int imageHeight, int maxFont)
+        private static DrawingImage DrawGeometryWords(IReadOnlyCollection<WordStyle> words, int imageWidth, int imageHeight, int maxFont)
         {
             var wordsGeometry = LineCloudBuilder.BuildWordsGeometry(words, imageWidth, imageHeight, maxFont);
             return GeometryPainter.DrawGeometry(wordsGeometry);

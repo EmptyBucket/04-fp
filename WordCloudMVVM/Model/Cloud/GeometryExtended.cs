@@ -14,15 +14,16 @@ namespace WordCloudMVVM.Model.Cloud
         private static FormattedText GetFormattedText(WordStyle wordFontSize) =>
             new FormattedText(wordFontSize.Say, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, new Typeface("Segoe UI"), wordFontSize.FontSize, Brushes.Black);
 
-        public static IEnumerable<Point> GetGeometryPoints(this Geometry geometry) =>
+        public static Point[] GetGeometryPoints(this Geometry geometry) =>
             geometry.GetFlattenedPathGeometry().Figures
             .SelectMany(figure => figure.Segments)
             .SelectMany(segment => ((PolyLineSegment)segment).Points)
-            .Select(poin => new Point((int)poin.X, (int)poin.Y));
+            .Select(poin => new Point((int)poin.X, (int)poin.Y))
+            .ToArray();
 
         public static double GetGeometryWidth(this Geometry geometry)
         {
-            IEnumerable<Point> pointGeometry = geometry.GetGeometryPoints();
+            var pointGeometry = geometry.GetGeometryPoints();
             double max = pointGeometry.Max(point => point.X);
             double min = pointGeometry.Min(point => point.X);
             return max - min;
@@ -30,7 +31,7 @@ namespace WordCloudMVVM.Model.Cloud
 
         public static double GetGeometryHeight(this Geometry geometry)
         {
-            IEnumerable<Point> pointGeometry = geometry.GetGeometryPoints();
+            var pointGeometry = geometry.GetGeometryPoints();
             double max = pointGeometry.Max(point => point.Y);
             double min = pointGeometry.Min(point => point.Y);
             return max - min;
@@ -48,7 +49,7 @@ namespace WordCloudMVVM.Model.Cloud
         public static double GetGeometryLeft(this Geometry geometry) =>
             geometry.GetGeometryPoints().Min(point => point.X);
 
-        public static bool CheckIntersection(this Geometry currentGeometry, IEnumerable<Geometry> geometryEnum) =>
+        public static bool CheckIntersection(this Geometry currentGeometry, IReadOnlyCollection<Geometry> geometryEnum) =>
             geometryEnum.Any(geometry => currentGeometry.FillContainsWithDetail(geometry) != IntersectionDetail.Empty);
     }
 }
