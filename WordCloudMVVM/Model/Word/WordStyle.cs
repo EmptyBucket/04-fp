@@ -4,22 +4,25 @@ namespace WordCloudMVVM.Model
 {
     public class WordStyle
     {
-        public string Say { get; }
+	    private string say;
+        public string Say { get { return say; } }
 
-        public int FontSize { get; }
+	    private int fontSize;
+        public int FontSize { get { return fontSize; } }
 
-        public Color Color { get; }
+	    private Color color;
+        public Color Color { get { return color; } }
 
         public WordStyle(string word, int fontSize, Color color) : this(word, fontSize)
         {
-            Color = color;
+            this.color = color;
         }
 
         public WordStyle(string word, int fontSize)
         {
-            Say = word;
-            FontSize = fontSize;
-            Color = Colors.Black;
+            say = word;
+            this.fontSize = fontSize;
+            color = Colors.Black;
         }
     }
 }

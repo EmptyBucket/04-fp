@@ -127,7 +127,7 @@ namespace WordCloudMVVM.ViewModel
             }
             private set
             {
-                Set(nameof(BitmapImage), ref mBitmapImage, value);
+                Set("BitmapImage", ref mBitmapImage, value);
             }
         }
         private IEnumerable<WordModelView> mGoodWordCollection = new List<WordModelView>();
@@ -139,7 +139,7 @@ namespace WordCloudMVVM.ViewModel
             }
             set
             {
-                Set(nameof(GoodWordCollection), ref mGoodWordCollection, value);
+                Set("GoodWordCollection", ref mGoodWordCollection, value);
             }
         }
         private IEnumerable<WordModelView> mBadWordCollection = new List<WordModelView>();
@@ -151,15 +151,24 @@ namespace WordCloudMVVM.ViewModel
             }
             set
             {
-                Set(nameof(BadWordCollection), ref mBadWordCollection, value);
+                Set("BadWordCollection", ref mBadWordCollection, value);
             }
         }
 
-        public RelayCommand OverviewTextFileCommand { get; }
-        public RelayCommand<object> OpenTextFileCommand { get; }
-        public RelayCommand<object> CreateImageCommand { get; }
-        public RelayCommand SaveImageCommand { get; }
-        public RelayCommand UpdateMaxFontCommand { get; }
+	    private RelayCommand overviewTextFileCommand;
+        public RelayCommand OverviewTextFileCommand { get { return overviewTextFileCommand; } }
+
+	    private RelayCommand<object> openTextFileCommand;
+        public RelayCommand<object> OpenTextFileCommand { get { return openTextFileCommand; } }
+
+	    private RelayCommand<object> createImageCommand;
+        public RelayCommand<object> CreateImageCommand { get { return createImageCommand; } }
+
+	    private RelayCommand saveImageCommand;
+        public RelayCommand SaveImageCommand { get { return saveImageCommand; } }
+
+	    private RelayCommand updateMaxFontCommand;
+        public RelayCommand UpdateMaxFontCommand { get { return updateMaxFontCommand; } }
 
         private string mPathTextFile;
         public string PathTextFile
@@ -170,12 +179,17 @@ namespace WordCloudMVVM.ViewModel
             }
             set
             {
-                Set(nameof(PathTextFile), ref mPathTextFile, value);
+                Set("PathTextFile", ref mPathTextFile, value);
             }
         }
-        public int MaxFontSize { get; set; } = 20;
-        public int SizeWidth { get; set; } = 100;
-        public int SizeHeight { get; set; } = 100;
+        private int maxFontSize = 20;
+        public int MaxFontSize { get { return maxFontSize; } set { maxFontSize = value; } }
+
+        private int sizeWidth = 100;
+        public int SizeWidth { get { return sizeWidth; } set { sizeWidth = value; } }
+
+        private int sizeHeight = 100;
+        public int SizeHeight { get { return sizeHeight; } set { sizeHeight = value; } }
 
         private readonly ParseDelegate Parse;
         private readonly DrawGeometryWordsDelegate DrawGeometryWords;
@@ -191,7 +205,7 @@ namespace WordCloudMVVM.ViewModel
             }
             set
             {
-                Set(nameof(IndeterminateOpen), ref mIndeterminateOpen, value);
+                Set("IndeterminateOpen", ref mIndeterminateOpen, value);
             }
         }
         private bool mIndeterminateCreate = false;
@@ -203,7 +217,7 @@ namespace WordCloudMVVM.ViewModel
             }
             set
             {
-                Set(nameof(IndeterminateCreate), ref mIndeterminateCreate, value);
+                Set("IndeterminateCreate", ref mIndeterminateCreate, value);
             }
         }
 
@@ -211,11 +225,11 @@ namespace WordCloudMVVM.ViewModel
         {
             Parse = parse;
             DrawGeometryWords = drawGeometryWords;
-            OverviewTextFileCommand = new RelayCommand(OverviewTextFile);
-            OpenTextFileCommand = new RelayCommand<object>(OpenTextFileAsync);
-            CreateImageCommand = new RelayCommand<object>(CreateImageAsync);
-            SaveImageCommand = new RelayCommand(SaveImage);
-            UpdateMaxFontCommand = new RelayCommand(UpdateMaxFont);
+            overviewTextFileCommand = new RelayCommand(OverviewTextFile);
+            openTextFileCommand = new RelayCommand<object>(OpenTextFileAsync);
+            createImageCommand = new RelayCommand<object>(CreateImageAsync);
+            saveImageCommand = new RelayCommand(SaveImage);
+            updateMaxFontCommand = new RelayCommand(UpdateMaxFont);
         }
     }
 }

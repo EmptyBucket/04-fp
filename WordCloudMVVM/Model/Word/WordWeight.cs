@@ -2,14 +2,16 @@
 {
     public class WordWeight
     {
-        public string Say { get; }
+	    private string say;
+        public string Say { get { return say; } }
 
-        public int Weight { get; }
+	    private int weight;
+        public int Weight { get { return weight; } }
 
         public WordWeight(string word, int weight)
         {
-            Say = word;
-            Weight = weight;
+            say = word;
+            this.weight = weight;
         }
     }
 }

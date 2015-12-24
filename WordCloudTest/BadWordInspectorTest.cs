@@ -12,7 +12,7 @@ namespace WordCloudTest
 
         public BadWordInspectorTest()
         {
-            mBadWords = new HashSet<string>($"о он его него ему нему его им ним нём она её".Split(' '));
+            mBadWords = new HashSet<string>("о он его него ему нему его им ним нём она её".Split(' '));
         }
 
         [TestMethod]

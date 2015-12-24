@@ -34,6 +34,8 @@ namespace WordCloudMVVM.Model.CloudPaint
 
                     coordX = geometryWord.GetGeometryRight() + 1;
                 }
+	            if (!currentLineGeometry.Any())
+		            break;
                 coordY = currentLineGeometry.Max(geometry => geometry.GetGeometryDown());
                 prewLineGeometry = currentLineGeometry.ToList();
             }

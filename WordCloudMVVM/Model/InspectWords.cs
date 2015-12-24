@@ -5,14 +5,16 @@ namespace WordCloudMVVM.Model
 {
     public class InspectWords
     {
-        public IEnumerable<WordWeight> GoodWords { get; }
+	    private IEnumerable<WordWeight> goodWords;
+        public IEnumerable<WordWeight> GoodWords { get { return goodWords; } }
 
-        public IEnumerable<WordWeight> BadWords { get; }
+	    private IEnumerable<WordWeight> badWords;
+        public IEnumerable<WordWeight> BadWords { get { return badWords; } }
 
         public InspectWords(IEnumerable<WordWeight> goodWords, IEnumerable<WordWeight> badWords)
         {
-            GoodWords = goodWords;
-            BadWords = badWords;
+            this.goodWords = goodWords;
+			this.badWords = badWords;
         }
     }
 }

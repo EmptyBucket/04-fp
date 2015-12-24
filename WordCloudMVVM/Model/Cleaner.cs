@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
 namespace WordCloudMVVM.Model
 {
@@ -7,7 +8,7 @@ namespace WordCloudMVVM.Model
         public static string Clean(string text)
         {
             string punctuation = "’'\\[\\],(){}⟨⟩<>:‒…!.\\‐\\-?„“«»“”‘’‹›;1234567890_\\-+=\\/|@#$%^&*\"\r\n\t";
-            string punctuationPattern = $"[{punctuation}]";
+			string punctuationPattern = String.Format("[{0}]", punctuation);
             Regex punctuationReg = new Regex(punctuationPattern);
 
             string lotSpacePattern = " {2,}";

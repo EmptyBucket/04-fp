@@ -51,10 +51,10 @@ namespace WordCloudMVVM.ViewModel
             return GeometryPainter.DrawGeometry(wordsGeometry);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
-            "CA1822:MarkMembersAsStatic",
-            Justification = "This non-static member is needed for data binding purposes.")]
-        public MainViewModel Main => new MainViewModel(DrawGeometryWords, Parse);
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance",
+		    "CA1822:MarkMembersAsStatic",
+		    Justification = "This non-static member is needed for data binding purposes.")]
+	    public MainViewModel Main { get { return new MainViewModel(DrawGeometryWords, Parse); }}
 
         public static void Cleanup()
         {
