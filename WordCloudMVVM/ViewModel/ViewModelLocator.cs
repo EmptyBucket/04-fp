@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Media;
 using NHunspell;
 using WordCloudMVVM.Model;
@@ -23,7 +24,7 @@ namespace WordCloudMVVM.ViewModel
 
             using (FileStream fileStream = new FileStream(pathFile, FileMode.Open))
             {
-                string text = Model.TextReader.Read(fileStream);
+                string text = Model.TextReader.Read(fileStream, Encoding.ASCII);
                 string cleanText = Cleaner.Clean(text);
                 var words = StemTokenizer.StemTokenize(cleanText, hunspell);
                 var wordsWeight = CountParser.CountParse(words);

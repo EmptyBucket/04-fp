@@ -15,27 +15,28 @@ namespace WordCloudMVVM.Model.CloudPaint
 
             Dictionary<WordStyle, Geometry> geometryWords = new Dictionary<WordStyle, Geometry>();
 
-            IEnumerator<WordStyle> enumeratorWords = sortWords.GetEnumerator();
-
-            List<Geometry> prewLineGeometry = new List<Geometry>();
-            for (double coordY = 0; coordY < imageHeight;)
+            using (IEnumerator<WordStyle> enumeratorWords = sortWords.GetEnumerator())
             {
-                List<Geometry> currentLineGeometry = new List<Geometry>();
-                for(double coordX = 0; coordX < imageWidth && enumeratorWords.MoveNext();)
+                List<Geometry> prewLineGeometry = new List<Geometry>();
+                for (double coordY = 0; coordY < imageHeight;)
                 {
-                    WordStyle word = enumeratorWords.Current;
-                    Geometry geometryWord = GeometryExtended.GetWordGeometry(word, new Point(coordX, coordY));
+                    List<Geometry> currentLineGeometry = new List<Geometry>();
+                    for(double coordX = 0; coordX < imageWidth && enumeratorWords.MoveNext();)
+                    {
+                        WordStyle word = enumeratorWords.Current;
+                        Geometry geometryWord = GeometryExtended.GetWordGeometry(word, new Point(coordX, coordY));
 
-                    for (double offset = 1; geometryWord.CheckIntersection(prewLineGeometry); offset++)
-                        geometryWord = GeometryExtended.GetWordGeometry(word, new Point(coordX, coordY + offset));
+                        for (double offset = 1; geometryWord.CheckIntersection(prewLineGeometry); offset++)
+                            geometryWord = GeometryExtended.GetWordGeometry(word, new Point(coordX, coordY + offset));
 
-                    geometryWords.Add(word, geometryWord);
-                    currentLineGeometry.Add(geometryWord);
+                        geometryWords.Add(word, geometryWord);
+                        currentLineGeometry.Add(geometryWord);
 
-                    coordX = geometryWord.GetGeometryRight() + 1;
+                        coordX = geometryWord.GetGeometryRight() + 1;
+                    }
+                    coordY = currentLineGeometry.Max(geometry => geometry.GetGeometryDown());
+                    prewLineGeometry = currentLineGeometry.ToList();
                 }
-                coordY = currentLineGeometry.Max(geometry => geometry.GetGeometryDown());
-                prewLineGeometry = currentLineGeometry.ToList();
             }
 
             return geometryWords;
