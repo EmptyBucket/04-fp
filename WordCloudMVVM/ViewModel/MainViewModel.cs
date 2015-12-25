@@ -155,19 +155,19 @@ namespace WordCloudMVVM.ViewModel
             }
         }
 
-	    private RelayCommand overviewTextFileCommand;
+	    private readonly RelayCommand overviewTextFileCommand;
         public RelayCommand OverviewTextFileCommand { get { return overviewTextFileCommand; } }
 
-	    private RelayCommand<object> openTextFileCommand;
+	    private readonly RelayCommand<object> openTextFileCommand;
         public RelayCommand<object> OpenTextFileCommand { get { return openTextFileCommand; } }
 
-	    private RelayCommand<object> createImageCommand;
+	    private readonly RelayCommand<object> createImageCommand;
         public RelayCommand<object> CreateImageCommand { get { return createImageCommand; } }
 
-	    private RelayCommand saveImageCommand;
+	    private readonly RelayCommand saveImageCommand;
         public RelayCommand SaveImageCommand { get { return saveImageCommand; } }
 
-	    private RelayCommand updateMaxFontCommand;
+	    private readonly RelayCommand updateMaxFontCommand;
         public RelayCommand UpdateMaxFontCommand { get { return updateMaxFontCommand; } }
 
         private string mPathTextFile;
