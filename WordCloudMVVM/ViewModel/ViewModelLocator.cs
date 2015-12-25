@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Media;
 using NHunspell;
 using WordCloudMVVM.Model;
@@ -9,7 +10,7 @@ using WordCloudMVVM.Model.CloudPaint;
 
 namespace WordCloudMVVM.ViewModel
 {
-    public delegate DrawingImage DrawGeometryWordsDelegate(IEnumerable<WordStyle> words, int imageWidth, int imageHeight, int maxFont);
+    public delegate DrawingImage DrawGeometryWordsDelegate(IReadOnlyCollection<WordStyle> words, int imageWidth, int imageHeight, int maxFont);
     public delegate InspectWords ParseDelegate(string path);
 
     public class ViewModelLocator
@@ -23,7 +24,7 @@ namespace WordCloudMVVM.ViewModel
 
             using (FileStream fileStream = new FileStream(pathFile, FileMode.Open))
             {
-                string text = Model.TextReader.Read(fileStream);
+                string text = Model.TextReader.Read(fileStream, Encoding.ASCII);
                 string cleanText = Cleaner.Clean(text);
                 var words = StemTokenizer.StemTokenize(cleanText, hunspell);
                 var wordsWeight = CountParser.CountParse(words);
@@ -39,13 +40,13 @@ namespace WordCloudMVVM.ViewModel
 
             var badWordsDict = new HashSet<string>(File.ReadAllLines(pathDicitonaryBadWord));
 
-            var goodWords = words.Where(wordWeight => !BadWordInspector.IsBad(wordWeight.Say, badWordsDict));
-            var badWords = words.Where(wordWeight => BadWordInspector.IsBad(wordWeight.Say, badWordsDict));
+            var goodWords = words.Where(wordWeight => !BadWordInspector.IsBad(wordWeight.Say, badWordsDict)).ToArray();
+            var badWords = words.Where(wordWeight => BadWordInspector.IsBad(wordWeight.Say, badWordsDict)).ToArray();
 
             return new InspectWords(goodWords, badWords);
         }
 
-        private static DrawingImage DrawGeometryWords(IEnumerable<WordStyle> words, int imageWidth, int imageHeight, int maxFont)
+        private static DrawingImage DrawGeometryWords(IReadOnlyCollection<WordStyle> words, int imageWidth, int imageHeight, int maxFont)
         {
             var wordsGeometry = LineCloudBuilder.BuildWordsGeometry(words, imageWidth, imageHeight, maxFont);
             return GeometryPainter.DrawGeometry(wordsGeometry);

@@ -14,7 +14,7 @@ namespace WordCloudTest
         [TestMethod]
         public void WordsWeight_Convert_CorrectWordsFontSize()
         {
-            IEnumerable<WordWeight> wordsWeight = new List<WordWeight>
+            var wordsWeight = new List<WordWeight>
             {
                 new WordWeight("пошел", 12),
                 new WordWeight("сегодня", 1),
@@ -27,8 +27,8 @@ namespace WordCloudTest
                 new WordWeight("машина", 1),
             };
             const int maxFontSize = 40;
-            IEnumerable<WordStyle> actualWordsStyel = WordWeightToWordStyleConverter.Convert(wordsWeight, maxFontSize);
-            IEnumerable<WordStyle> exceptedWordsStyle = new List<WordStyle>
+            var actualWordsStyle = WordWeightToWordStyleConverter.Convert(wordsWeight, maxFontSize);
+            var exceptedWordsStyle = new List<WordStyle>
             {
                 new WordStyle("пошел", 13),
                 new WordStyle("сегодня", 1),
@@ -41,7 +41,7 @@ namespace WordCloudTest
                 new WordStyle("машина", 1)
             };
 
-            Assert.IsTrue(actualWordsStyel
+            Assert.IsTrue(actualWordsStyle
                 .All(actualWordFontSize => exceptedWordsStyle.First(exceptWordFontSize => exceptWordFontSize.Say == actualWordFontSize.Say).FontSize == actualWordFontSize.FontSize));
         }
 
@@ -69,7 +69,7 @@ namespace WordCloudTest
         [TestMethod]
         public void WordsWeight_Convert_CountWordWeightEqualCountWordStyle()
         {
-            IEnumerable<WordWeight> wordsWeight = new List<WordWeight>
+            var wordsWeight = new List<WordWeight>
             {
                 new WordWeight("пошел", 12),
                 new WordWeight("сегодня", 1),
@@ -82,8 +82,8 @@ namespace WordCloudTest
                 new WordWeight("машина", 1),
             };
             const int maxFontSize = 40;
-            List<WordStyle> actualWordsStyle = WordWeightToWordStyleConverter.Convert(wordsWeight, maxFontSize).ToList();
-            List<WordStyle> exceptedWordStyle = new List<WordStyle>
+            var actualWordsStyle = WordWeightToWordStyleConverter.Convert(wordsWeight, maxFontSize).ToList();
+            var exceptedWordStyle = new List<WordStyle>
             {
                 new WordStyle("пошел", 13),
                 new WordStyle("сегодня", 1),

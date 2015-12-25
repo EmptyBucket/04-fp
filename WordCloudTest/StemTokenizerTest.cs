@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -25,8 +24,8 @@ namespace WordCloudTest
         public void Text_StemTokenize_StemAllWords()
         {
             string text = "свойственны дворе свете";
-            IEnumerable<string> exceptWord = new[] { "свойственный", "свет", "двор" };
-            IEnumerable<string> actualWord = StemTokenizer.StemTokenize(text, mHunspell);
+            var exceptWord = new[] { "свойственный", "свет", "двор" };
+            var actualWord = StemTokenizer.StemTokenize(text, mHunspell);
             Assert.IsTrue(exceptWord.All(word => actualWord.Contains(word)));
         }
 
@@ -34,7 +33,7 @@ namespace WordCloudTest
         public void Text_Tokenize_AllWords()
         {
             string text = "которые свойственны состаревшемуся в свете и при дворе значительному человеку";
-            IEnumerable<string> actualWord = StemTokenizer.Tokenize(text);
+            var actualWord = StemTokenizer.Tokenize(text);
             string[] exceptWord = new[] { "которые", "свойственны", "состаревшемуся", "в", "свете", "и", "при", "дворе", "значительному", "человеку" };
             Assert.IsTrue(exceptWord.All(word => actualWord.Contains(word)));
         }

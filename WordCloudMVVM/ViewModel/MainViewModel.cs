@@ -43,10 +43,10 @@ namespace WordCloudMVVM.ViewModel
                 InspectWords inspectWords = Parse(mPathTextFile);
                 mGoodWord = inspectWords.GoodWords;
                 mBadWord = inspectWords.BadWords;
-                GoodWordCollection = new ObservableCollection<WordModelView>(
+                GoodWordCollection = new List<WordModelView>(
                     WordWeightToWordStyleConverter.Convert(mGoodWord, MaxFontSize)
                     .Select(word => new WordModelView(word.Say, word.FontSize, word.Color, true)));
-                BadWordCollection = new ObservableCollection<WordModelView>(
+                BadWordCollection = new List<WordModelView>(
                     WordWeightToWordStyleConverter.Convert(mBadWord, MaxFontSize)
                     .Select(word => new WordModelView(word.Say, word.FontSize, word.Color, false)));
             });
@@ -64,7 +64,8 @@ namespace WordCloudMVVM.ViewModel
                 var styleWords = GoodWordCollection
                     .Concat(BadWordCollection)
                     .Where(wordIsActive => wordIsActive.Active)
-                    .Select(word => new WordStyle(word.Say, word.FontSize, word.Color));
+                    .Select(word => new WordStyle(word.Say, word.FontSize, word.Color))
+                    .ToArray();
                 DrawingImage drawImage = DrawGeometryWords(styleWords, SizeWidth, SizeHeight, MaxFontSize);
                 drawImage.Freeze();
                 BitmapImage = drawImage;
@@ -130,8 +131,8 @@ namespace WordCloudMVVM.ViewModel
                 Set("BitmapImage", ref mBitmapImage, value);
             }
         }
-        private IEnumerable<WordModelView> mGoodWordCollection = new List<WordModelView>();
-        public IEnumerable<WordModelView> GoodWordCollection
+        private List<WordModelView> mGoodWordCollection = new List<WordModelView>();
+        public List<WordModelView> GoodWordCollection
         {
             get
             {
@@ -142,8 +143,8 @@ namespace WordCloudMVVM.ViewModel
                 Set("GoodWordCollection", ref mGoodWordCollection, value);
             }
         }
-        private IEnumerable<WordModelView> mBadWordCollection = new List<WordModelView>();
-        public IEnumerable<WordModelView> BadWordCollection
+        private List<WordModelView> mBadWordCollection = new List<WordModelView>();
+        public List<WordModelView> BadWordCollection
         {
             get
             {
@@ -193,8 +194,8 @@ namespace WordCloudMVVM.ViewModel
 
         private readonly ParseDelegate Parse;
         private readonly DrawGeometryWordsDelegate DrawGeometryWords;
-        private IEnumerable<WordWeight> mGoodWord = new List<WordWeight>();
-        private IEnumerable<WordWeight> mBadWord = new List<WordWeight>();
+        private IReadOnlyCollection<WordWeight> mGoodWord = new List<WordWeight>();
+        private IReadOnlyCollection<WordWeight> mBadWord = new List<WordWeight>();
 
         private bool mIndeterminateOpen = false;
         public bool IndeterminateOpen

@@ -172,7 +172,7 @@
                   <BeginStoryboard>
                     <Storyboard TargetName="border">
                       <Int32Animation Storyboard.TargetProperty="(Panel.ZIndex)" To="2" SpeedRatio="10"/>
-                      <DoubleAnimation To="2.55" Storyboard.TargetProperty="RenderTransform.Children[0].ScaleX">
+                      <DoubleAnimation To="2.57" Storyboard.TargetProperty="RenderTransform.Children[0].ScaleX">
                         <DoubleAnimation.EasingFunction>
                           <PowerEase Power="10" EasingMode="EaseOut"/>
                         </DoubleAnimation.EasingFunction>
