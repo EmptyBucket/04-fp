@@ -1,25 +1,28 @@
 ﻿using System.Windows.Media;
 
-namespace WordCloudMVVM.Model
+namespace WordCloudMVVM.Model.Word
 {
     public class WordStyle
     {
-        public string Say { get; }
+        private readonly string _say;
+        public string Say { get { return _say; } }
 
-        public int FontSize { get; }
+        private readonly int _fontSize;
+        public int FontSize { get { return _fontSize; } }
 
-        public Color Color { get; }
+        private readonly Color _color;
+        public Color Color { get { return _color; } }
 
         public WordStyle(string word, int fontSize, Color color) : this(word, fontSize)
         {
-            Color = color;
+            _color = color;
         }
 
         public WordStyle(string word, int fontSize)
         {
-            Say = word;
-            FontSize = fontSize;
-            Color = Colors.Black;
+            _say = word;
+            _fontSize = fontSize;
+            _color = Colors.Black;
         }
     }
 }

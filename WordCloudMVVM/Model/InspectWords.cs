@@ -1,18 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using WordCloudMVVM.Model.Word;
 
 namespace WordCloudMVVM.Model
 {
     public class InspectWords
     {
-        public WordWeight[] GoodWords { get; }
+	    private readonly WordWeight[] _goodWords;
+        public WordWeight[] GoodWords { get { return _goodWords; } }
 
-        public WordWeight[] BadWords { get; }
+		private readonly WordWeight[] _badWords;
+		public WordWeight[] BadWords { get { return _badWords; } }
 
-        public InspectWords(IReadOnlyCollection<WordWeight> goodWords, IReadOnlyCollection<WordWeight> badWords)
+        public InspectWords(IEnumerable<WordWeight> goodWords, IEnumerable<WordWeight> badWords)
         {
-            GoodWords = goodWords.ToArray();
-            BadWords = badWords.ToArray();
+            _goodWords = goodWords.ToArray();
+            _badWords = badWords.ToArray();
         }
     }
 }

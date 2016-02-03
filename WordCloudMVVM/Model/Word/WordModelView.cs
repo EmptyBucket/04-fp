@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace WordCloudMVVM.Model
+namespace WordCloudMVVM.Model.Word
 {
     public class WordModelView
     {
@@ -10,11 +10,12 @@ namespace WordCloudMVVM.Model
 
         public bool Active { get; set; }
 
-        public string Say { get; }
+        private readonly string _say;
+        public string Say { get { return _say; } }
 
         public WordModelView(string word, int fontSize, Color color, bool active)
         {
-            Say = word;
+            _say = word;
             FontSize = fontSize;
             Color = color;
             Active = active;

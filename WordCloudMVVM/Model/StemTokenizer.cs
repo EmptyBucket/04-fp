@@ -6,13 +6,17 @@ namespace WordCloudMVVM.Model
 {
     public static class StemTokenizer
     {
-        public static string[] Tokenize(string text) =>
-            text
-            .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+	    public static string[] Tokenize(string text)
+	    {
+            return text
+                .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+	    }
 
-        public static string[] StemTokenize(string text, Hunspell hunspell) =>
-            Tokenize(text)
-            .Select(word => hunspell.Stem(word).FirstOrDefault() ?? word)
-            .ToArray();
+	    public static string[] StemTokenize(string text, Hunspell hunspell)
+	    {
+			return Tokenize(text)
+			    .Select(word => hunspell.Stem(word).FirstOrDefault() ?? word)
+			    .ToArray();
+	    }
     }
 }
