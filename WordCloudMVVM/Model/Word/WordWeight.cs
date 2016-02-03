@@ -1,17 +1,17 @@
-﻿namespace WordCloudMVVM
+﻿namespace WordCloudMVVM.Model.Word
 {
     public class WordWeight
     {
-	    private string say;
-        public string Say { get { return say; } }
+        private readonly string _say;
+        public string Say { get { return _say; } }
 
-	    private int weight;
-        public int Weight { get { return weight; } }
+        private readonly int _weight;
+        public int Weight { get { return _weight; } }
 
         public WordWeight(string word, int weight)
         {
-            say = word;
-            this.weight = weight;
+            _say = word;
+            _weight = weight;
         }
     }
 }

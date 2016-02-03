@@ -1,32 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHunspell;
-using WordCloudMVVM;
 using WordCloudMVVM.Model;
+using WordCloudMVVM.Model.Word;
 
 namespace WordCloudTest
 {
     [TestClass]
     public class WordCountParserTest
     {
-        private readonly Hunspell mHunspell;
-
-        public WordCountParserTest()
-        {
-            string pathHunspellDict = Path.Combine(Environment.CurrentDirectory, "HunspellDictionary", "ru_RU.dic");
-            string pathHunspellAff = Path.Combine(Environment.CurrentDirectory, "HunspellDictionary", "ru_RU.aff");
-            mHunspell = new Hunspell(pathHunspellAff, pathHunspellDict);
-        }
-
         [TestMethod]
         public void Words_Parse_CorrectEnumWordWeight()
         {
-            string[] words = new string[] { "свойственный", "состарившийся", "двор", "свет", "и", "при", "двор" };
+            var words = new[] { "свойственный", "состарившийся", "двор", "свет", "и", "при", "двор" };
 
-            var wordWeightEnum = CountParser.CountParse(words);
+            var wordWeightEnum = CountWordParser.Parse(words);
             var except = new WordWeight("свойственный", 1);
             var actual = wordWeightEnum.First(wordWeight => wordWeight.Say == "свойственный");
             Assert.AreEqual(except.Say, actual.Say);
@@ -45,7 +33,7 @@ namespace WordCloudTest
         public void OneWordsManyTimes_Parse_CorrectWordsWeight()
         {
             var words = Enumerable.Repeat("свет", 100).ToArray();
-            var actual = CountParser.CountParse(words);
+            var actual = CountWordParser.Parse(words);
             Assert.IsTrue(actual.All(wordWeight => wordWeight.Say == "свет"));
             Assert.AreEqual(1, actual.Count);
         }
@@ -54,7 +42,7 @@ namespace WordCloudTest
         public void OneWordOneTimes_Parse_CorrectWordWeight()
         {
             var words = new List<string> { "свет" };
-            var actual = CountParser.CountParse(words);
+            var actual = CountWordParser.Parse(words);
             Assert.IsTrue(actual.All(wordWeight => wordWeight.Say == "свет"));
             Assert.AreEqual(1, actual.Count);
         }
@@ -62,9 +50,9 @@ namespace WordCloudTest
         [TestMethod]
         public void Words_Parse_CorrectCoutElement()
         {
-            string[] words = new string[] { "свойственный", "состарившийся", "двор", "свет", "и", "при", "двор" };
-            var wordWeightEnum = CountParser.CountParse(words);
-            var actualCount = wordWeightEnum.Count();
+            var words = new[] { "свойственный", "состарившийся", "двор", "свет", "и", "при", "двор" };
+            var wordWeightEnum = CountWordParser.Parse(words);
+            var actualCount = wordWeightEnum.Count;
             Assert.AreEqual(6, actualCount);
         }
     }

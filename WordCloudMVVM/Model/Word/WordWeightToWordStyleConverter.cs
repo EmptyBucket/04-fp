@@ -7,27 +7,27 @@ namespace WordCloudMVVM.Model.Word
 {
     public static class WordWeightToWordStyleConverter
     {
-        public static WordStyle[] Convert(IReadOnlyCollection<WordWeight> wordsWeight, int MaxFontSize)
+        public static WordStyle[] Convert(IReadOnlyCollection<WordWeight> wordsWeight, int maxFontSize)
         {
-            WordWeight[] wordsWeightArray = wordsWeight.ToArray();
-            if (MaxFontSize == 0)
+            var wordsWeightArray = wordsWeight.ToArray();
+            if (maxFontSize == 0)
                 throw new ArgumentException("Max font size is 0");
-            int minWeight = 0;
-            int maxWeight = 0;
+            var minWeight = 0;
+            var maxWeight = 0;
             if (wordsWeightArray.Any())
             {
                 minWeight = wordsWeightArray.Min(wordWeight => wordWeight.Weight);
                 maxWeight = wordsWeightArray.Max(wordWeight => wordWeight.Weight);
             }
 
-            Random rand = new Random();
+            var rand = new Random();
 
             var wordsFontSize = wordsWeightArray
                 .Select(wordWeight =>
                 {
-                    int fontSize = wordWeight.Weight > minWeight ? (MaxFontSize * (wordWeight.Weight - minWeight)) / (maxWeight - minWeight) : 1;
+                    var fontSize = wordWeight.Weight > minWeight ? maxFontSize * (wordWeight.Weight - minWeight) / (maxWeight - minWeight) : 1;
                     fontSize = fontSize == 0 ? 1 : fontSize;
-                    Color color = new Color()
+                    var color = new Color
                     {
                         B = (byte)rand.Next(0, 255),
                         R = (byte)rand.Next(0, 255),

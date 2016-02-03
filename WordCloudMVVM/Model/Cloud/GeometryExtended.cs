@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using WordCloudMVVM.Model.Word;
 
 namespace WordCloudMVVM.Model.Cloud
 {
@@ -12,7 +13,6 @@ namespace WordCloudMVVM.Model.Cloud
 	    {
 		    return GetFormattedText(wordFontSize).BuildGeometry(point);
 	    }
-            
 
 	    private static FormattedText GetFormattedText(WordStyle wordFontSize)
 	    {
@@ -31,16 +31,16 @@ namespace WordCloudMVVM.Model.Cloud
         public static double GetGeometryWidth(this Geometry geometry)
         {
             var pointGeometry = geometry.GetGeometryPoints();
-            double max = pointGeometry.Max(point => point.X);
-            double min = pointGeometry.Min(point => point.X);
+            var max = pointGeometry.Max(point => point.X);
+            var min = pointGeometry.Min(point => point.X);
             return max - min;
         }
 
         public static double GetGeometryHeight(this Geometry geometry)
         {
             var pointGeometry = geometry.GetGeometryPoints();
-            double max = pointGeometry.Max(point => point.Y);
-            double min = pointGeometry.Min(point => point.Y);
+            var max = pointGeometry.Max(point => point.Y);
+            var min = pointGeometry.Min(point => point.Y);
             return max - min;
         }
 

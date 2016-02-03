@@ -2,28 +2,28 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using WordCloudMVVM.Model.Cloud;
+using WordCloudMVVM.Model.Word;
 
-namespace WordCloudMVVM.Model.CloudPaint
+namespace WordCloudMVVM.Model.Cloud
 {
-    static class LineCloudBuilder
+    public static class LineCloudBuilder
     {
         public static Dictionary<WordStyle, Geometry> BuildWordsGeometry(IReadOnlyCollection<WordStyle> words, int imageWidth, int imageHeight, int maxFont)
         {
             var sortWords = words.OrderByDescending(word => word.FontSize);
 
-            Dictionary<WordStyle, Geometry> geometryWords = new Dictionary<WordStyle, Geometry>();
+            var geometryWords = new Dictionary<WordStyle, Geometry>();
 
-            using (IEnumerator<WordStyle> enumeratorWords = sortWords.GetEnumerator())
+            using (var enumeratorWords = sortWords.GetEnumerator())
             {
-                List<Geometry> prewLineGeometry = new List<Geometry>();
+                var prewLineGeometry = new List<Geometry>();
                 for (double coordY = 0; coordY < imageHeight;)
                 {
-                    List<Geometry> currentLineGeometry = new List<Geometry>();
+                    var currentLineGeometry = new List<Geometry>();
                     for(double coordX = 0; coordX < imageWidth && enumeratorWords.MoveNext();)
                     {
-                        WordStyle word = enumeratorWords.Current;
-                        Geometry geometryWord = GeometryExtended.GetWordGeometry(word, new Point(coordX, coordY));
+                        var word = enumeratorWords.Current;
+                        var geometryWord = GeometryExtended.GetWordGeometry(word, new Point(coordX, coordY));
 
                         for (double offset = 1; geometryWord.CheckIntersection(prewLineGeometry); offset++)
                             geometryWord = GeometryExtended.GetWordGeometry(word, new Point(coordX, coordY + offset));
